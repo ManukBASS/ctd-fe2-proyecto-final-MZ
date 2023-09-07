@@ -25,8 +25,7 @@ const Bio = () => {
           key={nombre as string}
           onClick={() => onClick(nombre as NombresSimpsons)}
         >
-          {" "}
-          {nombre}{" "}
+          {nombre}
         </BotonBioActivo>
       ) : (
         <BotonBioInactivo

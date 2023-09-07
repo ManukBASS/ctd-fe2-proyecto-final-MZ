@@ -7,7 +7,6 @@ import { MayusculasEnPalabras } from "./Utils/MayusculasEnPalabras";
 import { NoticiaFinal } from "./Utils/NoticiaFinal";
 import CardNoticias from "./Utils/CardNoticias";
 
-
 import {
   CloseButton,
   TarjetaModal,
@@ -23,8 +22,8 @@ import {
 } from "./styled";
 
 /***
- * El principio Single Responsability:  
- * Codigo refactorizado, creacion de nuevos archivos dentro de carpeta news/Utils para extraer lógica del 
+ * Single Responsability:
+ * Codigo refactorizado, creacion de nuevos archivos dentro de carpeta news/Utils para extraer lógica del
  * componente Noticias. Principio de una sola responsabilidad para mantener la complejidad del componente baja
  */
 const Noticias = () => {
@@ -55,7 +54,7 @@ const Noticias = () => {
           <CardNoticias key={n.id} noticia={n} setModal={setModal} />
         ))}
         {modal ? (
-          (!modal.esPremium) ? (
+          !modal.esPremium ? (
             <ContenedorModal>
               <TarjetaModal>
                 <CloseButton onClick={() => setModal(null)}>

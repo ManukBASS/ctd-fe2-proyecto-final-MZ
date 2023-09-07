@@ -19,13 +19,10 @@ export const citaAlAzar: ICita = {
 };
 
 export const handlers = [
-  //array de peticiones
   rest.get(API_URL, (req, res, ctx) => {
-    //url , funcion q recibe rec
     const citaFinal = req.url.searchParams.get("character")
       ? citaConNombre
       : citaAlAzar;
-
     return res(ctx.status(200), ctx.json([citaFinal]));
   }),
 ];

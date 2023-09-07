@@ -5,5 +5,4 @@ export interface INoticias {
     fecha: Date ;
     esPremium: boolean;
     imagen: string;
-    
 };
