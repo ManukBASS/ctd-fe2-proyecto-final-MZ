@@ -44,11 +44,12 @@ export const TarjetaNoticia = styled.div`
   margin: 1rem;
   background-color: #fff;
   border-radius: 10px;
+  transition: all 0.3s ease-in-out;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
-  transition: all 0.3s ease;
   position: relative;
 
   &:hover {
+    transform: scale(1.05);
     box-shadow: 2px 2px 20px rgba(0, 0, 0, 0.3);
     cursor: pointer;
   }
