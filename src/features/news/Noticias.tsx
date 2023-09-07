@@ -1,6 +1,13 @@
 import { useEffect, useState } from "react";
 import { SuscribeImage, CloseButton as Close } from "../../assets";
 import { obtenerNoticias } from "./fakeRest";
+import { CalcularMinutosDePublicada } from "./Utils/CalcularMinutosDePublicada";
+import { INoticiasNormalizadas } from "./Utils/INoticiasNormalizadas";
+import { MayusculasEnPalabras } from "./Utils/MayusculasEnPalabras";
+import { NoticiaFinal } from "./Utils/NoticiaFinal";
+import CardNoticias from "./Utils/CardNoticias";
+
+
 import {
   CloseButton,
   TarjetaModal,
@@ -8,29 +15,18 @@ import {
   DescripcionModal,
   ImagenModal,
   TituloModal,
-  TarjetaNoticia,
-  FechaTarjetaNoticia,
-  DescripcionTarjetaNoticia,
-  ImagenTarjetaNoticia,
-  TituloTarjetaNoticia,
   ContenedorNoticias,
   ListaNoticias,
   TituloNoticias,
-  BotonLectura,
   BotonSuscribir,
   CotenedorTexto,
 } from "./styled";
 
-export interface INoticiasNormalizadas {
-  id: number;
-  titulo: string;
-  descripcion: string;
-  fecha: number | string;
-  esPremium: boolean;
-  imagen: string;
-  descripcionCorta?: string;
-}
-
+/***
+ * El principio Single Responsability:  
+ * Codigo refactorizado, creacion de nuevos archivos dentro de carpeta news/Utils para extraer lógica del 
+ * componente Noticias. Principio de una sola responsabilidad para mantener la complejidad del componente baja
+ */
 const Noticias = () => {
   const [noticias, setNoticias] = useState<INoticiasNormalizadas[]>([]);
   const [modal, setModal] = useState<INoticiasNormalizadas | null>(null);
@@ -40,27 +36,9 @@ const Noticias = () => {
       const respuesta = await obtenerNoticias();
 
       const data = respuesta.map((n) => {
-        const titulo = n.titulo
-          .split(" ")
-          .map((str) => {
-            return str.charAt(0).toUpperCase() + str.slice(1);
-          })
-          .join(" ");
-
-        const ahora = new Date();
-        const minutosTranscurridos = Math.floor(
-          (ahora.getTime() - n.fecha.getTime()) / 60000
-        );
-
-        return {
-          id: n.id,
-          titulo,
-          descripcion: n.descripcion,
-          fecha: `Hace ${minutosTranscurridos} minutos`,
-          esPremium: n.esPremium,
-          imagen: n.imagen,
-          descripcionCorta: n.descripcion.substring(0, 100),
-        };
+        const titulo = MayusculasEnPalabras(n);
+        const minutosTranscurridos = CalcularMinutosDePublicada(n);
+        return NoticiaFinal(n, minutosTranscurridos, titulo);
       });
 
       setNoticias(data);
@@ -74,18 +52,10 @@ const Noticias = () => {
       <TituloNoticias>Noticias de los Simpsons</TituloNoticias>
       <ListaNoticias>
         {noticias.map((n) => (
-          <TarjetaNoticia>
-            <ImagenTarjetaNoticia src={n.imagen} />
-            <TituloTarjetaNoticia>{n.titulo}</TituloTarjetaNoticia>
-            <FechaTarjetaNoticia>{n.fecha}</FechaTarjetaNoticia>
-            <DescripcionTarjetaNoticia>
-              {n.descripcionCorta}
-            </DescripcionTarjetaNoticia>
-            <BotonLectura onClick={() => setModal(n)}>Ver más</BotonLectura>
-          </TarjetaNoticia>
+          <CardNoticias key={n.id} noticia={n} setModal={setModal} />
         ))}
         {modal ? (
-          modal.esPremium ? (
+          (!modal.esPremium) ? (
             <ContenedorModal>
               <TarjetaModal>
                 <CloseButton onClick={() => setModal(null)}>
