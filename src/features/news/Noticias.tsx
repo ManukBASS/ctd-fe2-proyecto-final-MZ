@@ -54,7 +54,7 @@ const Noticias = () => {
           <CardNoticias key={n.id} noticia={n} setModal={setModal} />
         ))}
         {modal ? (
-          !modal.esPremium ? (
+          modal.esPremium ? (
             <ContenedorModal>
               <TarjetaModal>
                 <CloseButton onClick={() => setModal(null)}>
